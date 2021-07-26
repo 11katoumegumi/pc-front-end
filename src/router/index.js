@@ -1,29 +1,38 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../views/Home";
+import Register from "../views/Register";
+import Login from "../views/Login";
+import Search from "../views/Search";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
+  { path: "/", component: Home },
+  { path: "/home", name: "Home", component: Home },
+  { path: "/search/:keyword?", name: "Search", component: Search },
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: "/register",
+    name: "Register",
+    component: Register,
+    meta: {
+      isHideFooter: true,
+    },
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
+    path: "/login",
+    name: "Login",
+    component: Login,
+    //匹配的组件才能在$route中接收meta
+    meta: {
+      isHideFooter: true,
+    },
+  },
+];
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes
-})
+  mode: "history",
+  routes,
+});
 
-export default router
+export default router;
