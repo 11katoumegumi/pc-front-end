@@ -14,7 +14,7 @@
     >
       1
     </button>
-    <button v-show="myCurrentPage > 4">
+    <button v-show="startEnd.start > 2">
       <span class="iconfont icon-ellipsis" />
     </button>
     <button
@@ -27,7 +27,7 @@
     >
       {{ index + startEnd.start }}
     </button>
-    <button v-show="myCurrentPage < totalPages - 3">
+    <button v-show="startEnd.end < totalPages - 1">
       <span class="iconfont icon-ellipsis" />
     </button>
     <button
@@ -42,7 +42,7 @@
     <button :disabled="myCurrentPage <= 20">
       <span class="iconfont icon-Rightarrow" @click="handleRightClick" />
     </button>
-    <select>
+    <select v-model="myPageSize">
       <option :value="size" v-for="size in pageSizes" :key="size">
         每页 {{ size }}条
       </option>
@@ -52,11 +52,14 @@
 </template>
 
 <script>
+import _ from "lodash";
 export default {
   name: "Pagination",
   data() {
     return {
       myCurrentPage: this.currentPage,
+      myPageSize: this.pageSize,
+      isPageSizeChange: false,
     };
   },
   props: {
@@ -79,7 +82,7 @@ export default {
   },
   computed: {
     totalPages() {
-      return Math.ceil(this.total / this.pageSize);
+      return Math.ceil(this.total / this.myPageSize);
     },
     startEnd() {
       const { myCurrentPage, totalPages } = this;
@@ -130,6 +133,32 @@ export default {
         return;
       }
       this.myCurrentPage = this.myCurrentPage + 1;
+    },
+  },
+  watch: {
+    myCurrentPage: {
+      handler: _.debounce(
+        function (myCurrentPage) {
+          if (this.isPageSizeChange) {
+            this.isPageSizeChange = false;
+            return;
+          }
+          this.$emit("searchCurrentPage", myCurrentPage);
+        },
+        300,
+        {
+          leading: true,
+          maxwait: 5000,
+        }
+      ),
+    },
+    myPageSize(pageSize) {
+      if (this.myCurrentPage > this.totalPages) {
+        this.isPageSizeChange = true;
+        this.myCurrentPage = this.totalPages;
+        this.$emit("update:currentPage", this.totalPages);
+      }
+      this.$emit("searchPageSize", pageSize);
     },
   },
 };

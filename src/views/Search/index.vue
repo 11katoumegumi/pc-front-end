@@ -95,7 +95,15 @@
               <li class="yui3-u-1-5" v-for="good in goodsList" :key="good.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a><img :src="good.defaultImg" /></a>
+                    <router-link
+                      :to="{
+                        name: 'Detail',
+                        params: {
+                          id: good.id,
+                        },
+                      }"
+                      ><a><img :src="good.defaultImg" /></a
+                    ></router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -129,13 +137,19 @@
           </div>
           <!-- 分页 -->
           <div class="fr page">
-            <Pagination />
+            <Pagination
+              @searchCurrentPage="searchCurrentPage"
+              :currentPage.sync="options.pageNo"
+              @searchPageSize="searchPageSize"
+              :total="total"
+            />
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 import SearchSelector from "./SearchSelector/SearchSelector";
@@ -155,7 +169,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("search", ["goodsList"]),
+    ...mapState("search", ["goodsList", "total"]),
     order: {
       get() {
         return this.options.order.split(":");
@@ -169,6 +183,14 @@ export default {
       const { params, query } = this.$route;
       const goods = { ...params, ...query, ...this.options };
       this.getSearchGoods(goods);
+    },
+    searchCurrentPage(currentPage) {
+      this.options.pageNo = currentPage;
+      this.search();
+    },
+    searchPageSize(pageSize) {
+      this.options.pageSize = pageSize;
+      this.search();
     },
     searchTrademark(tm) {
       if (this.options.trademark) {

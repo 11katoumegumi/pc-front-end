@@ -4,6 +4,8 @@ import Home from "../views/Home";
 import Register from "../views/Register";
 import Login from "../views/Login";
 import Search from "../views/Search";
+import Detail from "../views/Detail";
+import shopCart from "../views/ShopCart";
 
 Vue.use(VueRouter);
 
@@ -28,11 +30,24 @@ const routes = [
       isHideFooter: true,
     },
   },
+  {
+    path: "/detail/:id",
+    name: "Detail",
+    component: Detail,
+  },
+
+  { path: "/addcartsuccess", component: shopCart, name: "ShopCart" },
 ];
 
 const router = new VueRouter({
   mode: "history",
   routes,
+  scrollBehavior() {
+    return {
+      x: 0,
+      y: 0,
+    };
+  },
 });
 
 export default router;
