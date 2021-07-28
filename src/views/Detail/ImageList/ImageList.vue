@@ -4,9 +4,6 @@
       <div class="swiper-slide" v-for="image in imageList" :key="image.id">
         <img :src="image.imgUrl" />
       </div>
-      <div class="swiper-slide" v-for="image in imageList" :key="image.id">
-        <img :src="image.imgUrl" />
-      </div>
     </div>
     <div class="swiper-button-next"></div>
     <div class="swiper-button-prev"></div>

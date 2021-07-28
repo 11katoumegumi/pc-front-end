@@ -13,16 +13,42 @@
             </li>
           </ul>
 
-          <div class="content">
-            <form action="##">
-              <div class="input-text clearFix">
+          <ValidationObserver v-slot="{ handleSubmit }" class="content">
+            <form action="##" @submit="handleSubmit(onSubmit)">
+              <ValidationProvider
+                class="input-text clearFix"
+                tag="div"
+                rules="required|phone"
+                mode="lazy"
+                v-slot="{ errors }"
+              >
                 <span></span>
-                <input type="text" placeholder="邮箱/用户名/手机号" />
-              </div>
-              <div class="input-text clearFix">
+                <input
+                  type="text"
+                  placeholder="邮箱/用户名/手机号"
+                  v-model="phone"
+                />
+                <br />
+                <br />
+                <p>{{ errors[0] }}</p>
+              </ValidationProvider>
+              <ValidationProvider
+                class="input-text clearFix"
+                tag="div"
+                rules="required|password"
+                mode="lazy"
+                v-slot="{ errors }"
+              >
                 <span class="pwd"></span>
-                <input type="text" placeholder="请输入密码" />
-              </div>
+                <input
+                  type="password"
+                  placeholder="请输入密码"
+                  v-model="password"
+                />
+                <br />
+                <br />
+                <p>{{ errors[0] }}</p>
+              </ValidationProvider>
               <div class="setting clearFix">
                 <label class="checkbox inline">
                   <input name="m1" type="checkbox" value="2" checked="" />
@@ -44,7 +70,7 @@
                 >立即注册</router-link
               >
             </div>
-          </div>
+          </ValidationObserver>
         </div>
       </div>
     </div>
@@ -67,8 +93,56 @@
 </template>
 
 <script>
+import { reqLogin } from "../../api/user";
+import { ValidationProvider, ValidationObserver, extend } from "vee-validate";
+import { required } from "vee-validate/dist/rules";
+
+const phoneReg = /^1[3-9][0-9]{9}$/;
+
+const passwordReg = /^[A-Za-z0-9]{5,15}/;
+
+extend("phone", {
+  validate(val) {
+    return phoneReg.test(val);
+  },
+  message: "输入的电话号码格式不正确",
+});
+extend("password", {
+  validate(val) {
+    return passwordReg.test(val);
+  },
+  message: "输入的密码格式不正确",
+});
+
+extend("required", {
+  ...required,
+  message: "请输入内容",
+});
+
 export default {
   name: "Login",
+  data() {
+    return {
+      phone: "",
+      password: "",
+    };
+  },
+  computed: {},
+  components: {
+    ValidationProvider,
+    ValidationObserver,
+  },
+  methods: {
+    async onSubmit() {
+      const { phone, password } = this;
+      const res = await reqLogin({ phone, password });
+
+      console.log(res.token);
+      // if (res.userId) {
+      //   this.$router.push("/");
+      // }
+    },
+  },
 };
 </script>
 
@@ -147,7 +221,9 @@ export default {
               box-sizing: border-box;
               border-radius: 2px 0 0 2px;
             }
-
+            p {
+              color: red;
+            }
             .pwd {
               background-position: -72px -201px;
             }

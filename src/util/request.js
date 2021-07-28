@@ -1,13 +1,14 @@
 import axios from "axios";
 import nProgress from "nprogress";
 import "nprogress/nprogress.css";
+import generateUserTempId from "../util/userTempId";
 // import { Message } from "element-ui";
 nProgress.configure({ showSpinner: false });
 
 // 创建axios实例
 const instance = axios.create({
   baseURL: "/api", //基础地址
-  headers: {}, //设置请求头
+  headers: { userTempid: generateUserTempId() }, //设置请求头
   timeout: 10000, //设置超时请求
 });
 /* 

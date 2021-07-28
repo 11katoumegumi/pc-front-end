@@ -1,4 +1,8 @@
-import { reqCategoryList, reqGetBanners, reqGetFloors } from "../../api/home";
+import {
+  reqCategoryList,
+  reqGetBanners,
+  reqGetFloors,
+} from "../../api/home.js";
 
 const state = {
   categoryList: [],

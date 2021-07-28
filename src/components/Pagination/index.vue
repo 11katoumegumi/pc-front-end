@@ -125,7 +125,6 @@ export default {
   },
   methods: {
     handleButtonClick(item) {
-      console.log(this.myCurrentPage === item);
       this.myCurrentPage = item;
     },
     handleRightClick() {
