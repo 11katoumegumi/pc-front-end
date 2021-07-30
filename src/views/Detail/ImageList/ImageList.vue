@@ -2,7 +2,7 @@
   <div class="swiper-container">
     <div class="swiper-wrapper">
       <div class="swiper-slide" v-for="image in imageList" :key="image.id">
-        <img :src="image.imgUrl" />
+        <img v-lazy="image.imgUrl" />
       </div>
     </div>
     <div class="swiper-button-next"></div>

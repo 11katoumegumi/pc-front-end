@@ -2,15 +2,39 @@
   <div class="header">
     <div class="header-top">
       <span class="header-user">
-        <span>尚品汇欢迎您！请</span>
-        <router-link to="/login" class="header-user-login">登录</router-link>
-        <router-link to="/register" class="header-user-register"
-          >免费注册</router-link
+        <span>尚品汇欢迎您！</span>
+        <span v-if="!nickName"
+          ><router-link to="/login" class="header-user-login"
+            >请 登录</router-link
+          >
+          <router-link to="/register" class="header-user-register"
+            >免费注册</router-link
+          ></span
         >
+        <span v-else
+          >{{ nickName }}
+          <button @click="handleLogout">退出登录</button>
+        </span>
       </span>
       <ul class="header-nav">
-        <li><a href="javascript:void(0)">我的订单</a></li>
-        <li><a href="javascript:void(0)">我的购物车</a></li>
+        <li>
+          <a
+            href="javascript:void(0)"
+            @click="
+              $router.push({
+                name: 'Center',
+              })
+            "
+            >我的订单</a
+          >
+        </li>
+        <li>
+          <a
+            href="javascript:void(0)"
+            @click="$router.history.push('/shopcart')"
+            >我的购物车</a
+          >
+        </li>
         <li><a href="javascript:void(0)">我的尚品汇</a></li>
         <li><a href="javascript:void(0)">尚品汇会员</a></li>
         <li><a href="javascript:void(0)">企业采购</a></li>
@@ -34,6 +58,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 export default {
   name: "Header",
   data() {
@@ -41,7 +66,11 @@ export default {
       keyword: "",
     };
   },
+  computed: {
+    ...mapState("user", ["nickName"]),
+  },
   methods: {
+    ...mapActions("user", ["logoutAction"]),
     goSearch() {
       const location = { name: "Search" };
 
@@ -56,6 +85,10 @@ export default {
       this.$router.push(location);
       //清空搜索
       this.keyword = "";
+    },
+    async handleLogout() {
+      await this.logoutAction();
+      location.reload();
     },
   },
 };

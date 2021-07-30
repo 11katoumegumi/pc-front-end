@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import { reqLogin } from "../../api/user";
+import { mapActions } from "vuex";
 import { ValidationProvider, ValidationObserver, extend } from "vee-validate";
 import { required } from "vee-validate/dist/rules";
 
@@ -133,14 +133,11 @@ export default {
     ValidationObserver,
   },
   methods: {
+    ...mapActions("user", ["loginAction"]),
     async onSubmit() {
       const { phone, password } = this;
-      const res = await reqLogin({ phone, password });
-
-      console.log(res.token);
-      // if (res.userId) {
-      //   this.$router.push("/");
-      // }
+      this.loginAction({ phone, password });
+      this.$router.push("/");
     },
   },
 };

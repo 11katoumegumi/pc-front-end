@@ -102,7 +102,7 @@
                           id: good.id,
                         },
                       }"
-                      ><a><img :src="good.defaultImg" /></a
+                      ><a><img v-lazy="good.defaultImg" /></a
                     ></router-link>
                   </div>
                   <div class="price">

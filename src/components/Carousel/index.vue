@@ -7,7 +7,7 @@
   >
     <div class="swiper-wrapper">
       <div class="swiper-slide" v-for="img in imgList" :key="img.id">
-        <img :src="img.imgUrl" />
+        <img v-lazy="img.imgUrl" />
       </div>
     </div>
     <!-- 如果需要分页器 -->
@@ -58,4 +58,13 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang='less' scoped>
+.swiper-slide {
+  width: 100%;
+  height: 100%;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+</style>

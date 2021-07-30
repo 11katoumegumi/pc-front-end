@@ -27,7 +27,7 @@
             />
           </li>
           <li class="cart-list-con2">
-            <img :src="cartInfo.imgUrl" />
+            <img v-lazy="cartInfo.imgUrl" />
             <div class="item-msg">
               {{ cartInfo.skuName }}
             </div>
@@ -93,7 +93,7 @@
           <i class="summoney">{{ totalPrice }}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <router-link to="/trade" class="sum-btn">结算</router-link>
         </div>
       </div>
     </div>
@@ -156,7 +156,7 @@ export default {
     },
     async getCartList() {
       const res = await reqGetCartList();
-      this.cartInfoList = res[0].cartInfoList;
+      this.cartInfoList = res.reduce((p, c) => p.concat(c.cartInfoList), []);
     },
   },
   mounted() {

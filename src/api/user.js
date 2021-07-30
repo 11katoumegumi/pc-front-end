@@ -21,3 +21,16 @@ export const reqLogin = (data) => {
     data,
   });
 };
+export const reqLogout = () => {
+  return request({
+    method: "GET",
+    url: "/user/passport/logout",
+  });
+};
+
+export const reqGetList = (page, limit) => {
+  return request({
+    method: "GET",
+    url: `/order/auth/${page}/${limit}`,
+  });
+};
